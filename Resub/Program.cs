@@ -5,7 +5,7 @@ namespace Resub
     /// <summary>
     ///     Command line invocation:
     ///     resub.exe -help || resub.exe /?
-    ///     resub.exe [inputfile_options] -i inputfile -offset offsetvalue [[outputfile_options] -o outputfile]
+    ///     resub.exe [inputfile_options] -i inputfile -offset offsetvalue [outputfile_options] -o outputfile
     /// </summary>
     internal class Program
     {
