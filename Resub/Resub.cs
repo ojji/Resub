@@ -20,7 +20,7 @@ namespace Resub
 
         public void ReadjustSubtitles()
         {
-            using (var reader = new SrtFileReader(_options.InputPath))
+            using (var reader = new SrtFileReader(_options.InputPath, _options.InputEncoding))
             {
                 _subtitles = reader.ReadSubtitlesFromFile();
             }

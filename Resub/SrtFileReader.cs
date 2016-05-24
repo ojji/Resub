@@ -7,7 +7,7 @@ namespace Resub
 {
     public class SrtFileReader : IDisposable
     {
-        public SrtFileReader(string path, bool detectEncodingFromBom = true) : this(new StreamReader(path, detectEncodingFromBom)) 
+        public SrtFileReader(string path, Encoding encoding, bool detectEncodingFromBom = true) : this(new StreamReader(path, encoding, detectEncodingFromBom)) 
         {
         }
 

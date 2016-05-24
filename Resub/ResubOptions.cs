@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Resub
@@ -9,13 +10,18 @@ namespace Resub
     /// </summary>
     public class ResubOptions
     {
+        public static readonly Encoding DefaultInputEncoding = Encoding.GetEncoding(1252);
+        
         public string InputPath { get; private set; }
+
+        public Encoding InputEncoding { get; private set; }
+
         public string OutputPath { get; private set; }
         public int Offset { get; private set; }
 
         public bool IsValid => !string.IsNullOrEmpty(InputPath) &&
                                !string.IsNullOrEmpty(OutputPath) &&
-                               Offset != 0;
+                               Offset != 0 && InputEncoding != null;
 
         public ResubOptions(string[] arguments)
         {
@@ -34,10 +40,26 @@ namespace Resub
 
         private void ReadInputFileOptions()
         {
+            InputEncoding = DefaultInputEncoding;
             // for the time we just skip until we find the -i switch
             int i = -1;
             while (i + 1 < _arguments.Length && _arguments[i + 1] != "-i")
             {
+                var currentArgument = _arguments[i + 1];
+                if (currentArgument.StartsWith("-ienc="))
+                {
+                    // utf-8
+                    // windows-1252
+                    string encoding = currentArgument.Substring("-ienc=".Length);
+                    try
+                    {
+                        InputEncoding = Encoding.GetEncoding(encoding);
+                    }
+                    catch (ArgumentException)
+                    {
+                        InputEncoding = null;
+                    }
+                }
                 i++;
             }
             _indexLastRead = i;

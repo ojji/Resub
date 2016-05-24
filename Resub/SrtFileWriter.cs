@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace Resub
 {
@@ -8,7 +9,7 @@ namespace Resub
     {
         public SrtFileWriter(string path)
         {
-            _internalWriter = new StreamWriter(path, false);
+            _internalWriter = new StreamWriter(path, false, Encoding.UTF8);
         }
         // for testing purposes
         internal SrtFileWriter(TextWriter internalWriter)

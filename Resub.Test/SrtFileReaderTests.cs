@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using NUnit.Framework;
 // ReSharper disable ObjectCreationAsStatement
 
@@ -46,7 +47,7 @@ BEMUTATJUK EGY SEGGFEJ FILMJÉT
             [Test]
             public void Invalid_path_should_throw_IOException()
             {
-                Assert.Throws(Is.InstanceOf<IOException>(), () => new SrtFileReader("totallyinvalidpath.srt"));
+                Assert.Throws(Is.InstanceOf<IOException>(), () => new SrtFileReader("totallyinvalidpath.srt", Encoding.UTF8));
             }
 
             [Test]

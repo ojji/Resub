@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Text;
+using NUnit.Framework;
 
 namespace Resub.Test
 {
@@ -9,6 +10,51 @@ namespace Resub.Test
         {
             var sut = new ResubOptions(new string[]{});
             Assert.That(ResubOptions.GetHelp(), Is.Not.Empty);
+        }
+
+        [Test]
+        public void No_input_encoding_set_should_fall_back_to_default_encoding()
+        {
+            var sut = new ResubOptions(new[] {
+                "-iopt1", "iopt1value",
+                "-iopt2", "iopt2value",
+                "-i", "inputfilepath.srt",
+                "-offset", "+1h1m1s1ms",
+                "-oopt1", "oopt1value",
+                "-oopt2", "oopt2value",
+                "-o", "outputfilepath.srt"
+            });
+            Assert.That(sut.InputEncoding, Is.EqualTo(ResubOptions.DefaultInputEncoding));
+        }
+
+        [Test]
+        public void Invalid_encoding_string_should_result_invalid_options()
+        {
+            var sut = new ResubOptions(new[] {
+                "-ienc=invalidstring",
+                "-iopt2", "iopt2value",
+                "-i", "inputfilepath.srt",
+                "-offset", "+1h1m1s1ms",
+                "-oopt1", "oopt1value",
+                "-oopt2", "oopt2value",
+                "-o", "outputfilepath.srt"
+            });
+            Assert.That(sut.IsValid, Is.False);
+        }
+
+        [Test]
+        public void Valid_encoding_string_should_set_the_input_encoding()
+        {
+            var sut = new ResubOptions(new[] {
+                "-ienc=utf-8",
+                "-iopt2", "iopt2value",
+                "-i", "inputfilepath.srt",
+                "-offset", "+1h1m1s1ms",
+                "-oopt1", "oopt1value",
+                "-oopt2", "oopt2value",
+                "-o", "outputfilepath.srt"
+            });
+            Assert.That(sut.InputEncoding, Is.EqualTo(Encoding.UTF8));
         }
 
         [Test]
