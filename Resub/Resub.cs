@@ -25,25 +25,28 @@ namespace Resub
                 _subtitles = reader.ReadSubtitlesFromFile();
             }
 
-            foreach (var subtitle in _subtitles)
+            if (_options.Offset != 0)
             {
-                Timestamp newStart, newEnd;
-
-                if (_options.Offset > 0)
+                foreach (var subtitle in _subtitles)
                 {
-                    newStart = subtitle.StartTime.PlusMilliseconds(_options.Offset);
-                    newEnd = subtitle.EndTime.PlusMilliseconds(_options.Offset);
-                }
-                else
-                {
-                    newStart = subtitle.StartTime.MinusMilliseconds(_options.Offset);
-                    newEnd = subtitle.EndTime.MinusMilliseconds(_options.Offset);
-                }
+                    Timestamp newStart, newEnd;
 
-                subtitle.StartTime = newStart;
-                subtitle.EndTime = newEnd;
+                    if (_options.Offset > 0)
+                    {
+                        newStart = subtitle.StartTime.PlusMilliseconds(_options.Offset);
+                        newEnd = subtitle.EndTime.PlusMilliseconds(_options.Offset);
+                    }
+                    else
+                    {
+                        newStart = subtitle.StartTime.MinusMilliseconds(_options.Offset);
+                        newEnd = subtitle.EndTime.MinusMilliseconds(_options.Offset);
+                    }
+
+                    subtitle.StartTime = newStart;
+                    subtitle.EndTime = newEnd;
+                }
             }
-
+            
             using (var writer = new SrtFileWriter(_options.OutputPath))
             {
                 writer.WriteSubtitlesToFile(_subtitles);

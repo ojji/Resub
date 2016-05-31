@@ -165,6 +165,7 @@ namespace Resub.Test
         }
 
         [Test]
+        [TestCase("+0ms", 0)]
         [TestCase("1h", 1 * 60 * 60 * 1000)]
         [TestCase("+1h", 1 * 60 * 60 * 1000)]
         [TestCase("-1h", -1 * 60 * 60 * 1000)]
@@ -183,6 +184,8 @@ namespace Resub.Test
                 "-oopt2", "oopt2value",
                 "-o", "outputfilepath.srt"
             });
+
+            Assert.That(sut.IsValid, Is.True);
             Assert.That(sut.Offset, Is.EqualTo(offsetValue));
         }
 

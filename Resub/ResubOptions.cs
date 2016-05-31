@@ -21,7 +21,7 @@ namespace Resub
 
         public bool IsValid => !string.IsNullOrEmpty(InputPath) &&
                                !string.IsNullOrEmpty(OutputPath) &&
-                               Offset != 0 && InputEncoding != null;
+                               _isValidOffset && InputEncoding != null;
 
         public ResubOptions(string[] arguments)
         {
@@ -105,12 +105,23 @@ namespace Resub
 
         private int ParseOffset(string offsetString)
         {
+            _isValidOffset = true;
             var match = OffsetRegex.Match(offsetString);
             if (!match.Success)
             {
+                _isValidOffset = false;
                 return 0;
             }
-            
+
+            if (string.IsNullOrEmpty(match.Groups["hours"].Value) &&
+                string.IsNullOrEmpty(match.Groups["minutes"].Value) &&
+                string.IsNullOrEmpty(match.Groups["seconds"].Value) &&
+                string.IsNullOrEmpty(match.Groups["milliseconds"].Value))
+            {
+                _isValidOffset = false;
+                return 0;
+            }
+
             int hours = string.IsNullOrEmpty(match.Groups["hours"].Value) ? 0 : Int32.Parse(match.Groups["hours"].Value);
             int minutes = string.IsNullOrEmpty(match.Groups["minutes"].Value) ? 0 : Int32.Parse(match.Groups["minutes"].Value);
             int seconds = string.IsNullOrEmpty(match.Groups["seconds"].Value) ? 0 : Int32.Parse(match.Groups["seconds"].Value);
@@ -121,7 +132,7 @@ namespace Resub
         }
 
         private int _indexLastRead = 0;
-
+        private bool _isValidOffset;
         private readonly string[] _arguments;
         private static readonly Regex OffsetRegex = new Regex(@"^(?<plusminus>[+-]?)((?<hours>\d+)(?:h))?((?<minutes>\d+)(?:m))?((?<seconds>\d+)(?:s))?((?<milliseconds>\d+)(?:ms))?$", RegexOptions.Compiled);
     }
