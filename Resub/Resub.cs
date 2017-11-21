@@ -38,8 +38,8 @@ namespace Resub
                     }
                     else
                     {
-                        newStart = subtitle.StartTime.MinusMilliseconds(_options.Offset);
-                        newEnd = subtitle.EndTime.MinusMilliseconds(_options.Offset);
+                        newStart = subtitle.StartTime.MinusMilliseconds(_options.Offset * -1);
+                        newEnd = subtitle.EndTime.MinusMilliseconds(_options.Offset * -1);
                     }
 
                     subtitle.StartTime = newStart;
